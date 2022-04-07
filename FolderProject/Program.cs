@@ -5,8 +5,8 @@ Console.Beep();
 for(; ; )
 {
     Console.WriteLine("wich your choise \n" +
-        "folder \n" +
-        "file\n\n");
+        "1.folderds \n" +
+        "2.files\n\n");
     int MainAction =Convert.ToInt32(Console.ReadLine());
 
     if (MainAction == 1) 
@@ -17,8 +17,7 @@ for(; ; )
                 "1.copy files from folder to another folder\n" +
                 "2.Cut files from folder to another folder\n" +
                 "3.Delete folder\n" +
-                "4.Report folder\n" +
-                "5.Close\n\n");
+                "4.Close\n\n");
 
             int Action = Convert.ToInt32(Console.ReadLine());
             switch (Action)
@@ -35,7 +34,7 @@ for(; ; )
                         {
                             Directory.CreateDirectory(LastFolderPath);
                         }
-                        foreach (string filePath in Directory.GetFiles(LastFolderPath))
+                        foreach (string filePath in Directory.GetFiles(FirstFolderPath))
                         {
                             try
                             {
