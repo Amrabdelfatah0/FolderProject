@@ -157,7 +157,7 @@ for(; ; )
                                     if (folderReportDtos.Any(x => x.ExtentionType == FileExtention))
                                     {
                                         DateTime FileTime = default;
-                                        folderReportDtos.Where(x => x.ExtentionType == FileExtention && FileTime == FileDate).FirstOrDefault()
+                                        folderReportDtos.Where(x => x.ExtentionType == FileExtention).FirstOrDefault()
                                             .ExtentionCount += 1;
                                     }
                                     else
@@ -182,7 +182,7 @@ for(; ; )
 
                                 for (int i = 0; i < Lines.Count; i++)
                                 {
-                                    //Console.WriteLine($"{i + 1} {Lines[i]}");
+                                    
                                     Console.WriteLine(@"{0} {1}", (i + 1), Lines[i]);
                                 }
 
