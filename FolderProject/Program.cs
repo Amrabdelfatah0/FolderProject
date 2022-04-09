@@ -17,7 +17,9 @@ for(; ; )
                 "1.copy files from folder to another folder\n" +
                 "2.Cut files from folder to another folder\n" +
                 "3.Delete folder\n" +
-                "4.Close\n\n");
+                 "4.Report folder\n" +
+                "5.Close\n\n");
+            
 
             int Action = Convert.ToInt32(Console.ReadLine());
             switch (Action)
@@ -136,6 +138,74 @@ for(; ; )
                         Console.WriteLine($"Exeption: {ex.Message}\nDate of error: {DateTime.Now}\n\n");
                     }
                     break;
+
+                case 4:
+                    try
+                    {
+                        Console.WriteLine("Insert folder path");
+                        string FolderPath = Console.ReadLine();
+                        if (!string.IsNullOrWhiteSpace(FolderPath))
+                        {
+                            if (Directory.Exists(FolderPath))
+                            {
+                                List<FolderReportDto> folderReportDtos = new List<FolderReportDto>();
+                                foreach (string FilePath in Directory.GetFiles(FolderPath))
+                                {
+                                    DateTime FileDate = File.GetCreationTime(FilePath);
+                                    decimal FileSize = new FileInfo(FilePath).Length;
+                                    string FileExtention = Path.GetExtension(FilePath);
+                                    if (folderReportDtos.Any(x => x.ExtentionType == FileExtention))
+                                    {
+                                        DateTime FileTime = default;
+                                        folderReportDtos.Where(x => x.ExtentionType == FileExtention && FileTime == FileDate).FirstOrDefault()
+                                            .ExtentionCount += 1;
+                                    }
+                                    else
+                                    {
+                                        FolderReportDto folderReportDto = new FolderReportDto();
+                                        folderReportDto.ExtentionType = FileExtention;
+                                        folderReportDto.ExtentionCount = 1;
+                                        folderReportDtos.Add(folderReportDto);
+                                    }
+                                }
+                                List<string> Lines = new List<string>();
+                                foreach (FolderReportDto folderReportDto in folderReportDtos)
+                                {
+                                    string line = $"Extention type: {folderReportDto.ExtentionType} - " +
+                                        $"Count: {folderReportDto.ExtentionCount}";
+                                    Lines.Add(line);
+                                }
+                                string NameOfTXT = Path.Combine(FolderPath, $"Report.txt");
+                                File.WriteAllLines(NameOfTXT, Lines);
+                                Console.WriteLine($"Report has been generted on path:\n" +
+                                    $"{NameOfTXT}\n\n");
+
+                                for (int i = 0; i < Lines.Count; i++)
+                                {
+                                    //Console.WriteLine($"{i + 1} {Lines[i]}");
+                                    Console.WriteLine(@"{0} {1}", (i + 1), Lines[i]);
+                                }
+
+                            }
+                            else
+                            {
+                                Console.WriteLine("you inserted wrong path");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Please insert folder path");
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Beep();
+                        Console.WriteLine($"Exeption: {ex.Message}\nDate of error: {DateTime.Now}\n\n");
+                    }
+                    break;
+                default:
+                    break;
             }
 
 
@@ -242,5 +312,11 @@ for(; ; )
         Console.WriteLine("you insert wrong number please choose again");
     }
 
+}
+public class FolderReportDto
+{
+    public string ExtentionType { get; set; }
+    public int ExtentionCount { get; set; }
+    public DateTime FileTime { get; set; }
 }
 
