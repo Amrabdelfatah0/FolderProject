@@ -144,19 +144,24 @@ for(; ; )
                     {
                         Console.WriteLine("Insert folder path");
                         string FolderPath = Console.ReadLine();
+                        Console.WriteLine("insert the date");
+                        DateTime FileDate= Convert.ToDateTime(Console.ReadLine());
                         if (!string.IsNullOrWhiteSpace(FolderPath))
                         {
                             if (Directory.Exists(FolderPath))
+
                             {
+                                List<FolderReportDto> MoreThan = new List<FolderReportDto>();
+                                List<FolderReportDto> LessThan = new List<FolderReportDto>();
                                 List<FolderReportDto> folderReportDtos = new List<FolderReportDto>();
                                 foreach (string FilePath in Directory.GetFiles(FolderPath))
                                 {
-                                    DateTime FileDate = File.GetCreationTime(FilePath);
+                                   DateTime FileDateAccess = File.GetLastAccessTime(FilePath);
                                     decimal FileSize = new FileInfo(FilePath).Length;
-                                    string FileExtention = Path.GetExtension(FilePath);
-                                    if (folderReportDtos.Any(x => x.ExtentionType == FileExtention))
+                                 
+                                    if (FileDate > FileDateAccess )
                                     {
-                                        DateTime FileTime = default;
+                                       
                                         folderReportDtos.Where(x => x.ExtentionType == FileExtention).FirstOrDefault()
                                             .ExtentionCount += 1;
                                     }
@@ -317,6 +322,9 @@ public class FolderReportDto
 {
     public string ExtentionType { get; set; }
     public int ExtentionCount { get; set; }
+    public decimal FileSizeBefor { get; set; }
+    public decimal FileSizeAfter { get; set; }
+
     public DateTime FileTime { get; set; }
 }
 
